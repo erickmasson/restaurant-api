@@ -6,8 +6,8 @@ import java.time.Instant;
 public class ReservationDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long ClientId;
-    private Long TableId;
+    private Long clientId;
+    private Long tableId;
     private Instant moment;
     private Integer partySize;
 
@@ -15,41 +15,21 @@ public class ReservationDTO implements Serializable {
     }
 
     public ReservationDTO(Long clientId, Long tableId, Instant moment, Integer partySize) {
-        ClientId = clientId;
-        TableId = tableId;
+        this.clientId = clientId;
+        this.tableId = tableId;
         this.moment = moment;
         this.partySize = partySize;
     }
 
-    public Long getClientId() {
-        return ClientId;
-    }
+    public Long getClientId() { return clientId; }
+    public void setClientId(Long clientId) { this.clientId = clientId; }
 
-    public void setClientId(Long clientId) {
-        ClientId = clientId;
-    }
+    public Long getTableId() { return tableId; }
+    public void setTableId(Long tableId) { this.tableId = tableId; }
 
-    public Long getTableId() {
-        return TableId;
-    }
+    public Instant getMoment() { return moment; }
+    public void setMoment(Instant moment) { this.moment = moment; }
 
-    public void setTableId(Long tableId) {
-        TableId = tableId;
-    }
-
-    public Instant getMoment() {
-        return moment;
-    }
-
-    public void setMoment(Instant moment) {
-        this.moment = moment;
-    }
-
-    public Integer getPartySize() {
-        return partySize;
-    }
-
-    public void setPartySize(Integer partySize) {
-        this.partySize = partySize;
-    }
+    public Integer getPartySize() { return partySize; }
+    public void setPartySize(Integer partySize) { this.partySize = partySize; }
 }

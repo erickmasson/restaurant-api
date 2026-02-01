@@ -1,20 +1,23 @@
 package com.projeto.restaurant.services;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.projeto.restaurant.dto.ReservationDTO;
 import com.projeto.restaurant.entities.Reservation;
+import com.projeto.restaurant.entities.enums.ReservationStatus;
 import com.projeto.restaurant.entities.RestaurantTable;
 import com.projeto.restaurant.entities.User;
-import com.projeto.restaurant.entities.enums.ReservationStatus;
 import com.projeto.restaurant.repositories.ReservationRepository;
 import com.projeto.restaurant.repositories.RestaurantTableRepository;
 import com.projeto.restaurant.repositories.UserRepository;
 import com.projeto.restaurant.services.exceptions.BusinessException;
 import com.projeto.restaurant.services.exceptions.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -34,25 +37,30 @@ public class ReservationService {
 
     public Reservation findById(Long id) {
         Optional<Reservation> obj = repository.findById(id);
-        // return obj.orElse(null);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public Reservation insert(ReservationDTO dto){
+    public Reservation insert(ReservationDTO dto) {
         User client = userRepository.findById(dto.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado: " + dto.getClientId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. Id: " + dto.getClientId()));
 
         RestaurantTable table = tableRepository.findById(dto.getTableId())
                 .orElseThrow(() -> new ResourceNotFoundException("Mesa não encontrada. Id: " + dto.getTableId()));
 
-        if(dto.getPartySize() > table.getCapacity()){
-            throw new BusinessException("A mesa "
-                    + table.getNumber()
-                    + " (capacidade: "
-                    + table.getCapacity()
-                    + ") não comporta "
-                    + dto.getPartySize()
-                    + " pessoas.");
+        if (dto.getPartySize() > table.getCapacity()) {
+            throw new BusinessException("A mesa " + table.getNumber() + " (capacidade: " + table.getCapacity()
+                    + ") não comporta " + dto.getPartySize() + " pessoas.");
+        }
+
+        Instant novaReserva = dto.getMoment();
+        Instant inicioJanela = novaReserva.minus(2, ChronoUnit.HOURS).plusSeconds(1);
+        Instant fimJanela = novaReserva.plus(2, ChronoUnit.HOURS).minusSeconds(1);
+
+        boolean conflito = repository.existConflict(dto.getTableId(), inicioJanela, fimJanela);
+        if(conflito){
+            throw new BusinessException("A mesa " + table.getNumber()
+                + " já está reservada para este horário (Intervalo de conflito: +/- 2 horas)."
+            );
         }
 
         Reservation entity = new Reservation();
