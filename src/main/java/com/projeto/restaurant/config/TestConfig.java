@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -26,11 +27,14 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
-        User u1 = new User(null, "Maria Brown", "mariabrown@gmail.com", "988888888", "123456", "CLIENT");
-        User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456", "CLIENT");
-        User u3 = new User(null, "Bob Admin", "bob@gmail.com", "911111111", "123456", "ADMIN");
+        User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", passwordEncoder.encode("123456"), "CLIENT");
+        User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", passwordEncoder.encode("123456"), "CLIENT");
+        User u3 = new User(null, "Bob Admin", "bob@gmail.com", "911111111", passwordEncoder.encode("123456"), "ADMIN");
 
         userRepository.saveAll(Arrays.asList(u1, u2, u3));
 
