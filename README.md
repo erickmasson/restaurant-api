@@ -8,7 +8,7 @@
 
 API RESTful completa para gerenciamento de reservas de restaurante, desenvolvida com Java e Spring Boot. O projeto inclui controle de autenticação/autorização com JWT, regras de negócio complexas para agendamento e infraestrutura containerizada.
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades:
 
 - **Autenticação e Segurança:**
   - Registro e Login de usuários.
@@ -24,7 +24,7 @@ API RESTful completa para gerenciamento de reservas de restaurante, desenvolvida
 - **Documentação:**
   - Interface Swagger UI para testes e visualização dos endpoints.
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas:
 
 - **Linguagem:** Java 17+
 - **Framework:** Spring Boot 3.4
@@ -35,10 +35,44 @@ API RESTful completa para gerenciamento de reservas de restaurante, desenvolvida
 - **Testes:** JUnit 5 + Mockito
 - **Documentação:** SpringDoc OpenAPI (Swagger)
 
-## 🏗️ Arquitetura
+## 🏗️ Arquitetura:
 
 O projeto segue uma arquitetura em camadas (N-Tier) focada na separação de responsabilidades:
 - **Controller:** Camada REST que recebe as requisições.
 - **Service:** Regras de negócio e validações.
 - **Repository:** Acesso a dados com Spring Data JPA.
 - **DTOs:** Objetos de transferência de dados para segurança e desacoplamento.
+
+## 📑 Documentação da API (Swagger):
+
+Após subir a aplicação, acesse a documentação interativa:
+
+👉 http://localhost:8080/swagger-ui/index.html
+
+**Como testar no Swagger:**
+1. Crie uma conta em ```/auth/register```.
+
+2. Faça login em ```/auth/login``` e copie o **token** gerado.
+
+3. Clique no botão Authorize (cadeado) no topo da página e cole o token.
+
+4. Agora você pode testar rotas protegidas como ```/reservations``` e ```/tables```.
+
+## 🧪 Testes Automatizados:
+
+O projeto possui testes unitários cobrindo as regras de negócio críticas (Service Layer) utilizando Mockito para isolar dependências externas.
+
+Para rodar os testes:
+
+```mvn test```
+
+**📝 Exemplo de Requisição (JSON)**
+POST ```/reservations```:
+```
+{
+  "clientId": 1,
+  "tableId": 1,
+  "moment": "2026-02-20T20:00:00Z",
+  "personCount": 2
+}
+```
