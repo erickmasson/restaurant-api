@@ -21,4 +21,8 @@ public class RestaurantTableService {
         Optional<RestaurantTable> obj = repository.findById(id);
         return obj.orElse(null);
     }
+
+    public RestaurantTable save(RestaurantTable table){
+        return repository.save(table);
+    }
 }
