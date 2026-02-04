@@ -11,5 +11,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             + "WHERE r.table.id = :tableId "
             + "AND r.moment >= :start "
             + "AND r.moment <= :end")
-    boolean existConflict(Long tableId, Instant start, Instant end);
+    boolean existsConflict(Long tableId, Instant start, Instant end);
 }

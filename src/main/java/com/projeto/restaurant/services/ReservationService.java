@@ -56,7 +56,7 @@ public class ReservationService {
         Instant inicioJanela = novaReserva.minus(2, ChronoUnit.HOURS).plusSeconds(1);
         Instant fimJanela = novaReserva.plus(2, ChronoUnit.HOURS).minusSeconds(1);
 
-        boolean conflito = repository.existConflict(dto.getTableId(), inicioJanela, fimJanela);
+        boolean conflito = repository.existsConflict(dto.getTableId(), inicioJanela, fimJanela);
         if(conflito){
             throw new BusinessException("A mesa " + table.getNumber()
                 + " já está reservada para este horário (Intervalo de conflito: +/- 2 horas)."
